@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<h>Hello World</h>
+<H1>Hello World</H1>
 </template>
 
 <style scoped>
