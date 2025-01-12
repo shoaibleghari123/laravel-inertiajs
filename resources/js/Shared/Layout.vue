@@ -1,19 +1,24 @@
 <template>
 
-    <section class="p-6 bg-gray-200">
-        <header class="flex justify-between">
-            <h1 class="font-bold text-lg">My App</h1>
+  <section class="p-6 bg-gray-200">
+    <header class="flex justify-between">
+      <div class="flex items-center">
+        <h1 class="font-bold text-lg">My App</h1>
 
-            <Nav></Nav>
+        <p class="text-sm ml-4">
+          Welcome Back, {{ $page.props.auth.user.username }}!
+        </p>
+      </div>
+      <Nav></Nav>
 
-        </header>
-    </section>
+    </header>
+  </section>
 
-    <section class="p-6">
-        <div class="max-w-3xl max-auto">
-            <slot></slot>
-        </div>
-    </section>
+  <section class="p-6">
+    <div class="max-w-3xl max-auto">
+      <slot></slot>
+    </div>
+  </section>
 
 
 </template>
@@ -21,8 +26,9 @@
 
 <script>
 import Nav from "./Nav.vue";
+
 export default {
-    components: { Nav }
+  components: {Nav}
 }
 </script>
 
