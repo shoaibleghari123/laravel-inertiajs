@@ -1,7 +1,9 @@
 <template>
-    <h1 class="text-4xl font-bold">Users</h1>
+    <Layout>
 
-    <Nav></Nav>
+        <h1 class="text-4xl font-bold">Users</h1>
+
+    </Layout>
 
     <div style="margin-top: 400px">
         <p>The current time is {{ time }}</p>
@@ -14,13 +16,11 @@
 
 <script>
 
-import Nav from "../Shared/Nav.vue";
-import { Link } from '@inertiajs/inertia-vue3';
+import Layout from "../Shared/Layout.vue";
 export default {
-    components: { Nav, Link },
-
-    props: { time: String }
+    components: { Layout }
 }
+
 </script>
 
 
