@@ -1,5 +1,10 @@
 <template>
 
+    <Head>
+        <title>User</title>
+        <meta type="description" content="User Description" head-key="description">
+    </Head>
+
     <h1 class="text-4xl font-bold">Users</h1>
 
     <div style="margin-top: 400px">
@@ -14,12 +19,8 @@
     </div>
 </template>
 
-<script>
-    export default {
-        props: {
-            time: String
-        }
-    }
+<script setup>
+    defineProps({ times: String });
 </script>
 
 
