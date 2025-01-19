@@ -15,7 +15,7 @@
   </section>
 
   <section class="p-6">
-    <div class="max-w-3xl max-auto">
+    <div class="max-w-3xl mx-auto">
       <slot></slot>
     </div>
   </section>

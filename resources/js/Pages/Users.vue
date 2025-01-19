@@ -5,6 +5,9 @@
     <div style="margin-top: 400px">
         <p>The current time is {{ time }}</p>
 
+    </div>
+
+    <div>
         <Link href="/users" class="text-blue-500" preserve-scroll>
             Refresh
         </Link>
@@ -12,15 +15,13 @@
 </template>
 
 <script>
-
-import Layout from "../Shared/Layout.vue";
-import Link from "@inertiajs/inertia-vue3";
-
-export default {
-    layout: Layout,
-    props: {time: String}
-}
-
+    export default {
+        props: {
+            time: String
+        }
+    }
 </script>
+
+
 
 
