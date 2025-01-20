@@ -20,7 +20,13 @@ Route::get('/', function () {
 
 Route::get('/users', function () {
     return inertia::render('Users', [
-        'time' => now()->ToTimeString(),
+        'users' => \App\Models\User::all()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ];
+        }),
     ]);
 });
 
