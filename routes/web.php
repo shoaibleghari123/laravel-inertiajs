@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use \App\Models\User;
+use \Illuminate\Support\Facades\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,13 +21,20 @@ Route::get('/', function () {
 
 Route::get('/users', function () {
     return inertia::render('Users', [
-        'users' => \App\Models\User::paginate(10)->through(function ($user) {
+        'users' => User::query()
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+            })
+            ->paginate(10)
+            ->withQueryString()
+            ->through(function ($user) {
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
             ];
         }),
+        'filters' => Request::only(['search']),
     ]);
 });
 
