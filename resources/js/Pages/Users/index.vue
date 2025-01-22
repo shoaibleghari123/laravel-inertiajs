@@ -3,14 +3,16 @@
     <Head title="Users" />
 
    <div class="flex justify-between mb-6">
-       <h1 class="text-3xl">Users</h1>
+
+       <div class="flex item-center">
+           <h1 class="text-3xl">Users</h1>
+           <Link href="/users/create" class="text-blue-500 text-sm ml-2 mt-3">New User</Link>
+       </div>
+
+
 
        <input v-model="search" type="text" placeholder="Search..." class="border px-2 rounded-lg">
    </div>
-
-
-
-
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

@@ -6,17 +6,20 @@
 
     <div class="mb-6">
       <label for="name" class="block mb-2 uppercase font-bold text-xs text-gray-700">Name</label>
-      <input v-model="form.name" type="text" class="border border-gray-400 p-2 w-full" id="name" name="name" required>
+      <input v-model="form.name" type="text" class="border border-gray-400 p-2 w-full" id="name" name="name" >
+      <div v-if="$page.props.errors.name" v-text="$page.props.errors.name" class="text-red-500 text-xs mt-1"></div>
     </div>
 
     <div class="mb-6">
       <label for="email" class="block mb-2 uppercase font-bold text-xs text-gray-700">Email</label>
-      <input v-model="form.email" type="email" class="border border-gray-400 p-2 w-full" id="email" name="email" required>
+      <input v-model="form.email" type="email" class="border border-gray-400 p-2 w-full" id="email" name="email">
+      <div v-if="errors.email" v-text="errors.email" class="text-red-500 text-xs mt-1"></div>
     </div>
 
     <div class="mb-6">
       <label for="password" class="block mb-2 uppercase font-bold text-xs text-gray-700">Password</label>
-      <input v-model="form.password" type="password" class="border border-gray-400 p-2 w-full" id="password" name="password" required>
+      <input v-model="form.password" type="password" class="border border-gray-400 p-2 w-full" id="password" name="password">
+      <div v-if="$page.props.errors.password" v-text="$page.props.errors.password" class="text-red-500 text-xs mt-1"></div>
     </div>
 
     <div class="mb-6">
@@ -32,6 +35,9 @@
 <script setup>
   import { reactive } from "vue";
   import { Inertia } from "@inertiajs/inertia";
+
+  defineProps({ errors: Object });
+
   let form = reactive({
     name: "",
     email: "",

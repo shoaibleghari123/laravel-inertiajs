@@ -44,7 +44,6 @@ Route::get('users/create', function () {
 
 
 Route::post('users', function () {
-    //validate the request
     $attributes = Request::validate(
         [
             'name' => ['required'],
@@ -52,10 +51,8 @@ Route::post('users', function () {
             'password' => ['required'],
         ]
     );
-    //create the user
     User::create($attributes);
     return redirect('/users');
-    //redirect to the users page
 });
 
 Route::get('/settings', function () {
