@@ -7,7 +7,7 @@ createInertiaApp({
     resolve: async name => {
         let page = (await import(`./Pages/${name}`)).default;
 
-        if (!page.layout) {
+        if (page.layout === undefined) {
             page.layout = Layout;
         }
 

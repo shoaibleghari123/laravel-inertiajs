@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use \App\Models\User;
 use \Illuminate\Support\Facades\Request;
+use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,51 +16,57 @@ use \Illuminate\Support\Facades\Request;
 |
 */
 
-Route::get('/', function () {
-    return inertia::render('Home');
-});
 
-Route::get('/users', function () {
-    return inertia::render('Users/index', [
-        'users' => User::query()
-            ->when(Request::input('search'), function ($query, $search) {
-                $query->where('name', 'LIKE', "%{$search}%");
-            })
-            ->paginate(10)
-            ->withQueryString()
-            ->through(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ];
-        }),
-        'filters' => Request::only(['search']),
-    ]);
-});
+Route::get('/login', [LoginController::class, 'create'])->name('login');
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth');
 
-Route::get('users/create', function () {
-    return inertia::render('Users/Create');
-});
+Route::middleware('auth')->group(function () {
 
+    Route::get('/', function () {
+        return inertia::render('Home');
+    });
 
-Route::post('users', function () {
-    $attributes = Request::validate(
-        [
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]
-    );
-    User::create($attributes);
-    return redirect('/users');
-});
+    Route::get('/users', function () {
+        return inertia::render('Users/index', [
+            'users' => User::query()
+                ->when(Request::input('search'), function ($query, $search) {
+                    $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->paginate(10)
+                ->withQueryString()
+                ->through(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                    ];
+                }),
+            'filters' => Request::only(['search']),
+        ]);
+    });
 
-Route::get('/settings', function () {
-    return inertia::render('Settings');
-});
+    Route::get('users/create', function () {
+        return inertia::render('Users/Create');
+    });
 
 
-Route::post('/logout', function () {
-    dd(request('foo'));
+    Route::post('users', function () {
+        $attributes = Request::validate(
+            [
+                'name' => ['required'],
+                'email' => ['required', 'email'],
+                'password' => ['required'],
+            ]
+        );
+        User::create($attributes);
+        return redirect('/users');
+    });
+
+    Route::get('/settings', function () {
+        return inertia::render('Settings');
+    });
+
+
+
 });
