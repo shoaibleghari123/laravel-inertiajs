@@ -475,6 +475,7 @@ var map = {
 	],
 	"./Users/": [
 		"./resources/js/Pages/Users/index.vue",
+		"/js/vendor",
 		"resources_js_Pages_Users_index_vue"
 	],
 	"./Users/Create": [
@@ -495,10 +496,12 @@ var map = {
 	],
 	"./Users/index": [
 		"./resources/js/Pages/Users/index.vue",
+		"/js/vendor",
 		"resources_js_Pages_Users_index_vue"
 	],
 	"./Users/index.vue": [
 		"./resources/js/Pages/Users/index.vue",
+		"/js/vendor",
 		"resources_js_Pages_Users_index_vue"
 	]
 };
@@ -512,7 +515,7 @@ function webpackAsyncContext(req) {
 	}
 
 	var ids = map[req], id = ids[0];
-	return __webpack_require__.e(ids[1]).then(() => {
+	return Promise.all(ids.slice(1).map(__webpack_require__.e)).then(() => {
 		return __webpack_require__(id);
 	});
 }

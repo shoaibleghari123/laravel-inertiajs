@@ -49,17 +49,36 @@
     import Pageination from "../../Shared/Pageination.vue";
     import {ref, watch} from "vue";
     import {Inertia} from "@inertiajs/inertia";
+    import {throttle, debounce} from "lodash";
 
-   let props = defineProps({ users: Object, filters: Object });
+    let props = defineProps({ users: Object, filters: Object });
 
     let search = ref(props.filters.search);
 
-    watch(search, (value) => {
+    // Make a request to the server on every keystroke
+    // watch(search, (value) => {
+    //     Inertia.get('/users', {search: value}, {
+    //         preserveState: true,
+    //         replace: true,
+    //     });
+    // });
+
+    // Make a request to the server on every keystroke, but throttle it to only happen every 250ms
+    // watch(search, throttle((value) => {
+    //     Inertia.get('/users', {search: value}, {
+    //         preserveState: true,
+    //         replace: true,
+    //     });
+    // }, 250));
+
+    // Make a request to the server on every keystroke, but debounce it to only happen after the user has stopped typing for 250ms
+    watch(search, debounce((value) => {
         Inertia.get('/users', {search: value}, {
             preserveState: true,
             replace: true,
         });
-    });
+    }, 250));
+
 </script>
 
 

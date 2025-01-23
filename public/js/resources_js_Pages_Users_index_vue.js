@@ -14,6 +14,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Shared_Pageination_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Shared/Pageination.vue */ "./resources/js/Shared/Pageination.vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -28,14 +31,32 @@ __webpack_require__.r(__webpack_exports__);
     __expose();
     var props = __props;
     var search = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)(props.filters.search);
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.watch)(search, function (value) {
+
+    // Make a request to the server on every keystroke
+    // watch(search, (value) => {
+    //     Inertia.get('/users', {search: value}, {
+    //         preserveState: true,
+    //         replace: true,
+    //     });
+    // });
+
+    // Make a request to the server on every keystroke, but throttle it to only happen every 250ms
+    // watch(search, throttle((value) => {
+    //     Inertia.get('/users', {search: value}, {
+    //         preserveState: true,
+    //         replace: true,
+    //     });
+    // }, 250));
+
+    // Make a request to the server on every keystroke, but debounce it to only happen after the user has stopped typing for 250ms
+    (0,vue__WEBPACK_IMPORTED_MODULE_1__.watch)(search, (0,lodash__WEBPACK_IMPORTED_MODULE_3__.debounce)(function (value) {
       _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia.get('/users', {
         search: value
       }, {
         preserveState: true,
         replace: true
       });
-    });
+    }, 250));
     var __returned__ = {
       get props() {
         return props;
@@ -54,6 +75,12 @@ __webpack_require__.r(__webpack_exports__);
       watch: vue__WEBPACK_IMPORTED_MODULE_1__.watch,
       get Inertia() {
         return _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia;
+      },
+      get throttle() {
+        return lodash__WEBPACK_IMPORTED_MODULE_3__.throttle;
+      },
+      get debounce() {
+        return lodash__WEBPACK_IMPORTED_MODULE_3__.debounce;
       }
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
