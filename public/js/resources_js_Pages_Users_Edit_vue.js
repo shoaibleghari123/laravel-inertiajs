@@ -27,7 +27,7 @@ __webpack_require__.r(__webpack_exports__);
       email: props.user.email
     });
     var submit = function submit() {
-      form.put("/users/".concat(props.user.id));
+      form.post("/users/".concat(props.user.id));
     };
     var __returned__ = {
       props: props,
@@ -87,7 +87,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     title: "Edit User"
   }), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
     "class": "text-3xl"
-  }, "EditUser", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+  }, "Edit User", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     onSubmit: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $setup.submit && $setup.submit.apply($setup, arguments);
     }, ["prevent"])),

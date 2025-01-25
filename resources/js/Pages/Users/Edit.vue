@@ -1,6 +1,6 @@
 <template>
   <Head title="Edit User" />
-  <h1 class="text-3xl">EditUser</h1>
+  <h1 class="text-3xl">Edit User</h1>
 
   <form @submit.prevent="submit" class="max-w-md mx-auto mt-8">
 
@@ -38,7 +38,7 @@
   });
 
   let submit = () => {
-      form.put(`/users/${props.user.id}`);
+      form.post(`/users/${props.user.id}`);
   }
 
 </script>

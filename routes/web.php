@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use \App\Models\User;
 use \Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,79 +28,15 @@ Route::middleware('auth')->group(function () {
         return inertia::render('Home');
     });
 
-    Route::get('/users', function () {
-
-        return inertia::render('Users/index', [
-            'users' => User::query()
-                ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->paginate(10)
-                ->withQueryString()
-                ->through(function ($user) {
-                    return [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'can' => [
-                            'edit' => \Illuminate\Support\Facades\Auth::user()->can('edit', $user),
-                            'delete' => \Illuminate\Support\Facades\Auth::user()->can('delete', $user),
-                        ],
-                    ];
-                }),
-            'filters' => Request::only(['search']),
-            'can' => [
-                'createUser' => \Illuminate\Support\Facades\Auth::user()->can('create', User::class),
-            ],
-        ]);
-    });
-
-    Route::get('users/create', function () {
-        return inertia::render('Users/Create');
-    })->can('create,App\Models\User');
-
-    Route::get('users/{user}/edit', function ($user) {
-        $model = User::find($user);
-        return inertia::render('Users/Edit', [
-            'user' => $model,
-        ]);
-    });
-
-    Route::put('users/{user}', function ($user) {
-        $user = User::find($user);
-        $attributes = Request::validate(
-            [
-                'name' => ['required'],
-                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-            ]
-        );
-        $user->update($attributes);
-        return redirect('/users');
-    });
-
-
-    Route::post('users', function () {
-        $attributes = Request::validate(
-            [
-                'name' => ['required'],
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]
-        );
-        User::create($attributes);
-        return redirect('/users');
-    });
-
-    Route::get('/users/{user}/delete', function ($user) {
-        $model = User::find($user);
-        $model->delete();
-        return inertia::render('Users/Delete');
-    });
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/create', [UserController::class, 'create']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('users/{user}/edit', [UserController::class, 'edit']);
+    Route::post('users/{user}', [UserController::class, 'update']);
+    Route::get('/users/{user}/delete', [UserController::class, 'destroy']);
 
     Route::get('/settings', function () {
         return inertia::render('Settings');
     });
-
-
 
 });
