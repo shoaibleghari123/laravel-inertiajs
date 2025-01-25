@@ -482,12 +482,9 @@ var map = {
 		"resources_js_Pages_Settings_vue"
 	],
 	"./Users": [
-		"./resources/js/Pages/Users.vue",
-		"resources_js_Pages_Users_vue"
-	],
-	"./Users.vue": [
-		"./resources/js/Pages/Users.vue",
-		"resources_js_Pages_Users_vue"
+		"./resources/js/Pages/Users/index.vue",
+		"/js/vendor",
+		"resources_js_Pages_Users_index_vue"
 	],
 	"./Users/": [
 		"./resources/js/Pages/Users/index.vue",
