@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
                         'email' => $user->email,
                         'can' => [
                             'edit' => \Illuminate\Support\Facades\Auth::user()->can('edit', $user),
+                            'delete' => \Illuminate\Support\Facades\Auth::user()->can('delete', $user),
                         ],
                     ];
                 }),
@@ -57,6 +58,25 @@ Route::middleware('auth')->group(function () {
         return inertia::render('Users/Create');
     })->can('create,App\Models\User');
 
+    Route::get('users/{user}/edit', function ($user) {
+        $model = User::find($user);
+        return inertia::render('Users/Edit', [
+            'user' => $model,
+        ]);
+    });
+
+    Route::put('users/{user}', function ($user) {
+        $user = User::find($user);
+        $attributes = Request::validate(
+            [
+                'name' => ['required'],
+                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            ]
+        );
+        $user->update($attributes);
+        return redirect('/users');
+    });
+
 
     Route::post('users', function () {
         $attributes = Request::validate(
@@ -68,6 +88,12 @@ Route::middleware('auth')->group(function () {
         );
         User::create($attributes);
         return redirect('/users');
+    });
+
+    Route::get('/users/{user}/delete', function ($user) {
+        $model = User::find($user);
+        $model->delete();
+        return inertia::render('Users/Delete');
     });
 
     Route::get('/settings', function () {

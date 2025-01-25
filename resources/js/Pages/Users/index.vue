@@ -32,10 +32,12 @@
                   {{ user.name }}
                 </th>
 
-                <td v-if="user.can.edit" class="px-6 py-4">
-                    <Link :href="`/users/${user.id}/edit`" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>
-
+                <td class="px-6 py-4">
+                    <Link v-if="user.can.edit" :href="`/users/${user.id}/edit`" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</Link>
+                    <span v-if="user.can.edit && user.can.delete"> | </span>
+                    <Link v-if="user.can.delete" :href="`/users/${user.id}/delete`" class="font-medium text-red-600 dark:text-blue-500 hover:underline">Delete</Link>
                 </td>
+
             </tr>
 
             </tbody>

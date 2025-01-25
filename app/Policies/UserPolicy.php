@@ -15,7 +15,11 @@ class UserPolicy
 
     public function edit(User $user, User $model)
     {
-        //dd((bool) mt_rand(0, 1));
+        return (bool) mt_rand(0, 1);
+    }
+
+    public function delete(User $user, User $model)
+    {
         return (bool) mt_rand(0, 1);
     }
 

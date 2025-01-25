@@ -507,6 +507,14 @@ var map = {
 		"./resources/js/Pages/Users/Create_backup.vue",
 		"resources_js_Pages_Users_Create_backup_vue"
 	],
+	"./Users/Edit": [
+		"./resources/js/Pages/Users/Edit.vue",
+		"resources_js_Pages_Users_Edit_vue"
+	],
+	"./Users/Edit.vue": [
+		"./resources/js/Pages/Users/Edit.vue",
+		"resources_js_Pages_Users_Edit_vue"
+	],
 	"./Users/index": [
 		"./resources/js/Pages/Users/index.vue",
 		"/js/vendor",
