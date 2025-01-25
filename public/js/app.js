@@ -141,11 +141,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["active"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
+    href: "/posts",
+    active: _ctx.$page.component === 'Posts'
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return _cache[2] || (_cache[2] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Posts")]);
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["active"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
     href: "/settings",
     active: _ctx.$page.component === 'Settings'
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[2] || (_cache[2] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Settings")]);
+      return _cache[3] || (_cache[3] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Settings")]);
     }),
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["active"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
@@ -153,7 +161,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     method: "post"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[3] || (_cache[3] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Log Out")]);
+      return _cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Log Out")]);
     }),
     _: 1 /* STABLE */
   })])])]);
@@ -472,6 +480,22 @@ var map = {
 	"./Home.vue": [
 		"./resources/js/Pages/Home.vue",
 		"resources_js_Pages_Home_vue"
+	],
+	"./Posts/Index": [
+		"./resources/js/Pages/Posts/Index.vue",
+		"resources_js_Pages_Posts_Index_vue"
+	],
+	"./Posts/Index.vue": [
+		"./resources/js/Pages/Posts/Index.vue",
+		"resources_js_Pages_Posts_Index_vue"
+	],
+	"./Posts/Show": [
+		"./resources/js/Pages/Posts/Show.vue",
+		"resources_js_Pages_Posts_Show_vue"
+	],
+	"./Posts/Show.vue": [
+		"./resources/js/Pages/Posts/Show.vue",
+		"resources_js_Pages_Posts_Show_vue"
 	],
 	"./Settings": [
 		"./resources/js/Pages/Settings.vue",

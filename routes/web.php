@@ -6,26 +6,23 @@ use \App\Models\User;
 use \Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\VoteController;
 
 
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth');
 
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/', function () {
         return inertia::render('Home');
+    });
+
+    Route::get('/settings', function () {
+        return inertia::render('Settings');
     });
 
     Route::get('/users', [UserController::class, 'index']);
@@ -35,8 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::post('users/{user}', [UserController::class, 'update']);
     Route::get('/users/{user}/delete', [UserController::class, 'destroy']);
 
-    Route::get('/settings', function () {
-        return inertia::render('Settings');
-    });
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/{post}', [PostController::class, 'show']);
+    Route::post('/posts/{postId}/votes',[VoteController::class, 'store']);
+
 
 });
