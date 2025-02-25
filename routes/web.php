@@ -15,7 +15,12 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth');
 
 
+
 Route::middleware('auth')->group(function () {
+
+    Route::get('posts/create',function() {
+        return inertia::render('Posts/Create');
+    });
 
     Route::get('/', function () {
         return inertia::render('Home');
@@ -32,9 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::post('users/{user}', [UserController::class, 'update']);
     Route::get('/users/{user}/delete', [UserController::class, 'destroy']);
 
-    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/posts/{post}', [PostController::class, 'show']);
     Route::post('/posts/{postId}/votes',[VoteController::class, 'store']);
 
+    Route::get('post/create',[PostController::class, 'create'])->name('posts.create');
+    Route::post('post/store',[PostController::class, 'store'])->name('posts.store');
+
+//    Route::get('post/create',function() {
+//        return inertia::render('Posts/Create');
+//    });
 
 });

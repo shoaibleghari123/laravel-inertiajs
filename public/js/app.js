@@ -481,6 +481,14 @@ var map = {
 		"./resources/js/Pages/Home.vue",
 		"resources_js_Pages_Home_vue"
 	],
+	"./Posts/Create": [
+		"./resources/js/Pages/Posts/Create.vue",
+		"resources_js_Pages_Posts_Create_vue"
+	],
+	"./Posts/Create.vue": [
+		"./resources/js/Pages/Posts/Create.vue",
+		"resources_js_Pages_Posts_Create_vue"
+	],
 	"./Posts/Index": [
 		"./resources/js/Pages/Posts/Index.vue",
 		"resources_js_Pages_Posts_Index_vue"
