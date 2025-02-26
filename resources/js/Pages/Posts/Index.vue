@@ -19,71 +19,116 @@
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <ul class="space-y-4">
-
             <li
                 v-for="post in posts.data"
                 :key="post.id"
-                class="bg-white p-4 rounded-lg shadow-sm flex justify-between items-start"
+                class="bg-white p-4 rounded-lg shadow-sm flex flex-col gap-4"
             >
-                <div class="flex-1">
-                    <Link
-                        :href="`/posts/${post.id}`"
-                        class="text-blue-600 hover:text-blue-800 font-bold mb-2 block underline"
-                    >
-                        {{ post.title }}
-                    </Link>
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <Link
+                            :href="`/posts/${post.id}`"
+                            class="text-blue-600 hover:text-blue-800 font-bold mb-2 block underline"
+                        >
+                            {{ post.title }}
+                        </Link>
 
-                    <p class="text-gray-700 mb-2">
-                        {{ post.body.length > 100 ? post.body.substring(0, 100) + '...' : post.body }}
-                    </p>
+                        <p class="text-gray-700 mb-2">
+                            {{ post.body.length > 100 ? post.body.substring(0, 100) + '...' : post.body }}
+                        </p>
 
-                    Tags:
-                    <span
-                        v-for="tag in post.tags"
-                        :key="tag.id"
-                        class="text-green-600 pl-2 font-bold"
-                    >
-            {{ tag.name }}
-        </span>
+                        Tags:
+                        <span
+                            v-for="tag in post.tags"
+                            :key="tag.id"
+                            class="text-green-600 pl-2 font-bold"
+                        >
+                            {{ tag.name }}
+                        </span>
 
-                    <p class="text-sm text-gray-500">
-                        {{ formattedVotes(post.votes_count) }}
-                    </p>
+                        <p class="text-sm text-gray-500">
+                            {{ formattedVotes(post.votes_count) }}
+                        </p>
+                    </div>
+
+                    <div class="flex">
+                        <Link
+                            v-if="post.can.edit"
+                            :href="`/posts/${post.id}/edit`"
+                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm ml-4"
+                        >
+                            Edit
+                        </Link>
+
+                        <button
+                            v-if="post.can.delete"
+                            @click="deletePost(post.id)"
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm ml-4"
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
 
-                <Link
-                    v-if="post.can.edit" :href="`/posts/${post.id}/edit`"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm ml-4"
-                >
-                    Edit
-                </Link>
-
-                <button v-if="post.can.delete" @click="deletePost(post.id)" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm ml-4">Delete</button>
+                <!-- Comment Box -->
+                <div class="mt-2 flex">
+                    <textarea
+                        v-model="comments[post.id]"
+                        placeholder="Write a comment..."
+                        class="w-full border rounded-md focus:ring focus:ring-blue-300"
+                    ></textarea>
+                    <button
+                        @click="submitComment(post.id)"
+                        class="mt-2 ml-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 text-sm"
+                    >
+                        Comment
+                    </button>
+                </div>
             </li>
-
         </ul>
     </div>
-    <Pageination :links="posts.links" class="mt-6"/>
 
+    <Pageination :links="posts.links" class="mt-6" />
 </template>
 
 <script setup>
+import { ref } from "vue";
+import { useForm } from "@inertiajs/inertia-vue3";
+import Pageination from "../../Shared/Pageination.vue";
 
-    import { useForm } from "@inertiajs/inertia-vue3";
-    import Pageination from "../../Shared/Pageination.vue";
-
-    defineProps({
+defineProps({
     posts: Object,
-     can: Object
+    can: Object
 });
 
- const deletePost = (id) => {
-     if (confirm("Are you sure you want to delete this post?")) {
-         useForm().delete(`/posts/${id}`);
-     }
- };
+const comments = ref({});
+
+const deletePost = (id) => {
+    if (confirm("Are you sure you want to delete this post?")) {
+        useForm().delete(`/posts/${id}`);
+    }
+};
 
 const formattedVotes = (votesCount) => {
     return `${votesCount} ${votesCount === 1 ? 'vote' : 'votes'}`;
 };
+
+const submitComment = (postId) => {
+    if (!comments.value[postId]) return;
+
+    const form = useForm({
+        post_id: postId,
+        comment: comments.value[postId],
+    });
+
+    form.post('/comments', {
+        onSuccess: () => {
+            comments.value[postId] = "";
+        },
+        onError: (errors) => {
+            console.error('Comment submission errors:', errors);
+        }
+    });
+};
 </script>
+Walker

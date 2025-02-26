@@ -14,7 +14,6 @@ class Post extends Model
     {
         return $this->hasMany(Vote::class);
     }
-
     public function user()
     {
         return $this->belongsTo(User::class)->withDefault();
@@ -22,5 +21,10 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
