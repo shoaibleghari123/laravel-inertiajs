@@ -43,9 +43,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('post/create',[PostController::class, 'create'])->name('posts.create');
     Route::post('post/store',[PostController::class, 'store'])->name('posts.store');
-
-//    Route::get('post/create',function() {
-//        return inertia::render('Posts/Create');
-//    });
+    Route::get('posts/{post}/edit',[PostController::class, 'edit'])->name('posts.edit');
+    Route::post('posts/{post}',[PostController::class, 'update'])->name('posts.update');
+    Route::get('posts/{post}/delete',[PostController::class, 'delete'])->name('posts.delete');
 
 });

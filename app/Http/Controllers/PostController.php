@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostRequest;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -14,8 +16,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::withCount('votes')
-            ->with('tags')->get();
+        $posts = Post::withCount('votes')->with('tags')->get();
         return inertia::render('Posts/Index', ['posts' => $posts]);
     }
 
@@ -36,9 +37,46 @@ class PostController extends Controller
             $tag = Tag::firstOrCreate(['name' => $tagData['name']]);
             $post->tags()->attach($tag->id);
         });
-       // dd($validated, $request->all(), $validated->except(['title']));
-      //  Post::create($validated);
         return Redirect::route('posts.index')->with('message', 'Post created.');
+    }
+
+    public function edit(Post $post)
+    {
+        return inertia::render('Posts/Edit', ['post' => $post, 'tags' => $post->tags]);
+    }
+
+    public function update(UpdatePostRequest $request, Post $post)
+    {
+        $validated = $request->validated();
+        $post->update(['title' => $validated['title'], 'body' => $validated['body']]);
+        $tagIds = collect($validated['tags'])->map(function ($tagData) {
+            return Tag::updateOrCreate(
+                ['id' => $tagData['id'] ?? null],
+                ['name' => $tagData['name']]
+            )->id;
+        })->toArray();
+
+        $post->tags()->sync($tagIds);
+        return redirect()->route('posts.index')->with('message', 'Post updated successfully.');
+    }
+
+    public function delete(Post $post)
+    {
+        DB::beginTransaction();
+        try {
+            $tagIds = $post->tags()->pluck('tags.id');
+
+            $post->tags()->detach();
+            $post->delete();
+            Tag::whereIn('id', $tagIds)->doesntHave('posts')->delete();
+
+            DB::commit();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+            return redirect()->back()->with('message', 'Failed to save');
+        }
+        return redirect()->route('posts.index')->with('message', 'Post and tags deleted successfully.');
     }
 
     public function show(Post $post)

@@ -1,18 +1,19 @@
 <template>
-  <Head title="Create User" />
-  <h1 class="text-3xl">Create New Post</h1>
+  <Head title="Update Post" />
+  <h1 class="text-3xl">Update Post</h1>
 
     <form @submit.prevent="submitForm" class="max-w-md mx-auto mt-8">
 
         <div class="mb-8">
             <label for="title" class="block mb-2 uppercase font-bold text-xs text-gray-700">Title</label>
             <input v-model="form.title" type="text" class="border border-gray-400 p-2 w-full" id="title" name="title" >
+
             <div v-if="form.errors.title" v-text="form.errors.title" class="text-red-500 text-xs mt-1"></div>
         </div>
 
         <div class="mb-6">
             <label for="body" class="block mb-2 uppercase font-bold text-xs text-gray-700">Description</label>
-            <textarea v-model="form.body" class="border border-gray-400 p-2 w-full" id="body" name="body"></textarea>
+            <textarea v-model="form.body" class="border border-gray-400 p-2 w-full" id="body" name="body" rows="5"></textarea>
             <div v-if="form.errors.body" v-text="form.errors.body" class="text-red-500 text-xs mt-1"></div>
         </div>
 
@@ -33,7 +34,6 @@
                     </p>
                 </div>
 
-
                 <button type="button" @click="Remove(index)" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"> Delete</button>
             </div>
 
@@ -43,7 +43,7 @@
         </div>
 
         <div class="mb-6">
-            <button type="submit" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500" :disabled="form.processing">Submit</button>
+            <button type="submit" class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500" :disabled="form.processing">Update</button>
         </div>
 
     </form>
@@ -53,10 +53,17 @@
 <script setup>
     import { useForm } from "@inertiajs/inertia-vue3";
 
+
+    const props = defineProps({
+        post: {
+            type: Object
+        }
+    });
+
     let form = useForm({
-        title: "",
-        body: "",
-        tags: [{ name: ''}],
+        title: props.post.title || "",
+        body: props.post.body || "",
+        tags: props.post.tags.length ? props.post.tags.map(tag => ({ name: tag.name })) : [{ name: '' }],
     });
 
     const addMore = () => {
@@ -70,9 +77,9 @@
         }
     }
     let submitForm = () => {
-        form.post("/post/store");
-    }
+        form.post(`/posts/${props.post.id}`);
 
+    }
 
 </script>
 

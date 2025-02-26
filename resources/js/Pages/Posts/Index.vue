@@ -21,35 +21,57 @@
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <ul class="space-y-4">
+
+
             <li
                 v-for="post in posts"
                 :key="post.id"
-                class="bg-white p-4 rounded-lg shadow-sm"
+                class="bg-white p-4 rounded-lg shadow-sm flex justify-between items-start"
             >
+                <div class="flex-1">
+                    <Link
+                        :href="`/posts/${post.id}`"
+                        class="text-blue-600 hover:text-blue-800 font-bold mb-2 block underline"
+                    >
+                        {{ post.title }}
+                    </Link>
+
+                    <p class="text-gray-700 mb-2">
+                        {{ post.body.length > 100 ? post.body.substring(0, 100) + '...' : post.body }}
+                    </p>
+
+                    Tags:
+                    <span
+                        v-for="tag in post.tags"
+                        :key="tag.id"
+                        class="text-green-600 pl-2 font-bold"
+                    >
+            {{ tag.name }}
+        </span>
+
+                    <p class="text-sm text-gray-500">
+                        {{ formattedVotes(post.votes_count) }}
+                    </p>
+                </div>
+
+                <!-- Edit Button aligned to the right -->
                 <Link
-                    :href="`/posts/${post.id}`"
-                    class="text-blue-600 hover:text-blue-800 font-bold mb-2 block underline"
+                    :href="`/posts/${post.id}/edit`"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm ml-4"
                 >
-                    {{ post.title }}
+                    Edit
                 </Link>
 
-                <p class="text-gray-700 mb-2">
-                    {{ post.body.length > 100 ? post.body.substring(0, 100) + '...' : post.body }}
-                </p>
-
-                Tags:
-                <span
-                    v-for="tag in post.tags"
-                    :key="tag.id"
-                    class="text-green-600 pl-2 font-bold"
+                <Link
+                    :href="`/posts/${post.id}/delete`"
+                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm ml-4"
                 >
-                    {{ tag.name }}
-                </span>
-
-                <p class="text-sm text-gray-500">
-                    {{ formattedVotes(post.votes_count) }}
-                </p>
+                    Delete
+                </Link>
             </li>
+
+
+
         </ul>
     </div>
 </template>

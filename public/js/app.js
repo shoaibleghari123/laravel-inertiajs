@@ -134,7 +134,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["active"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
     href: "/users",
-    active: _ctx.$page.component === 'Users'
+    active: _ctx.$page.component === 'Users/index'
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return _cache[1] || (_cache[1] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Users")]);
@@ -142,7 +142,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["active"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_NavLink, {
     href: "/posts",
-    active: _ctx.$page.component === 'Posts'
+    active: _ctx.$page.component === 'Posts/Index'
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return _cache[2] || (_cache[2] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Posts")]);
@@ -488,6 +488,14 @@ var map = {
 	"./Posts/Create.vue": [
 		"./resources/js/Pages/Posts/Create.vue",
 		"resources_js_Pages_Posts_Create_vue"
+	],
+	"./Posts/Edit": [
+		"./resources/js/Pages/Posts/Edit.vue",
+		"resources_js_Pages_Posts_Edit_vue"
+	],
+	"./Posts/Edit.vue": [
+		"./resources/js/Pages/Posts/Edit.vue",
+		"resources_js_Pages_Posts_Edit_vue"
 	],
 	"./Posts/Index": [
 		"./resources/js/Pages/Posts/Index.vue",
