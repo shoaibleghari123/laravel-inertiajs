@@ -21,7 +21,7 @@ class PostController extends Controller
     {
         $user = auth()->user();
         $posts = Post::withCount('votes')->with('tags')
-            ->paginate(10)
+            ->paginate(5)
             ->through(function ($post) {
                 return [
                     'id' => $post->id,
@@ -83,7 +83,7 @@ class PostController extends Controller
         return redirect()->route('posts.index')->with('message', 'Post updated successfully.');
     }
 
-    public function delete(Post $post)
+    public function destroy(Post $post)
     {
         if (!Gate::allows('delete', $post)) {
             abort(403, 'Unauthorized action.');

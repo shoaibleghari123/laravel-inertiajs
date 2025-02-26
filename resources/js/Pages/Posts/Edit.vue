@@ -77,8 +77,7 @@
         }
     }
     let submitForm = () => {
-        form.post(`/posts/${props.post.id}`);
-
+        form.put(`/posts/${props.post.id}`);
     }
 
 </script>

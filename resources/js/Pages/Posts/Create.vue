@@ -33,13 +33,30 @@
                     </p>
                 </div>
 
+                <button
+                    @click="Remove(index)"
+                    type="button"
+                    class="bg-gray-100 text-red-600 rounded w-11 h-11 self-end flex items-center justify-center"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
 
-                <button type="button" @click="Remove(index)" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"> Delete</button>
             </div>
 
             <div class="flex justify-end space-x-2 mt-2">
-                <button type="button" @click="addMore" class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-600"> Add More</button>
+                <button
+                    @click="addMore"
+                    type="button"
+                    class="bg-gray-100 text-green-600 rounded w-11 h-11 self-end flex items-center justify-center"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
             </div>
+
         </div>
 
         <div class="mb-6">
@@ -70,7 +87,7 @@
         }
     }
     let submitForm = () => {
-        form.post("/post/store");
+        form.post("/posts");
     }
 
 

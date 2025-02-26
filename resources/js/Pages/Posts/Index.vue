@@ -13,10 +13,8 @@
     <div class="flex justify-between mb-6">
         <div class="flex item-center">
             <h1 class="text-3xl">Post</h1>
-            <Link href="/post/create" class="text-blue-500 text-sm ml-2 mt-3">New Post</Link>
+            <Link href="/posts/create" class="text-blue-500 text-sm ml-2 mt-3">New Post</Link>
         </div>
-
-        <!-- <input v-model="search" type="text" placeholder="Search..." class="border px-2 rounded-lg"> -->
     </div>
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -54,32 +52,36 @@
                 </div>
 
                 <Link
-                    v-if="post.can.edit" :href="`/posts/1/edit`"
+                    v-if="post.can.edit" :href="`/posts/${post.id}/edit`"
                     class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm ml-4"
                 >
                     Edit
                 </Link>
 
-                <Link
-                    v-if="post.can.delete" :href="`/posts/${post.id}/delete`"
-                    class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm ml-4"
-                >
-                    Delete
-                </Link>
+                <button v-if="post.can.delete" @click="deletePost(post.id)" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm ml-4">Delete</button>
             </li>
-
-
 
         </ul>
     </div>
+    <Pageination :links="posts.links" class="mt-6"/>
+
 </template>
 
 <script setup>
 
- defineProps({
+    import { useForm } from "@inertiajs/inertia-vue3";
+    import Pageination from "../../Shared/Pageination.vue";
+
+    defineProps({
     posts: Object,
      can: Object
 });
+
+ const deletePost = (id) => {
+     if (confirm("Are you sure you want to delete this post?")) {
+         useForm().delete(`/posts/${id}`);
+     }
+ };
 
 const formattedVotes = (votesCount) => {
     return `${votesCount} ${votesCount === 1 ? 'vote' : 'votes'}`;

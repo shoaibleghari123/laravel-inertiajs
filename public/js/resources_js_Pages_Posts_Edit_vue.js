@@ -47,7 +47,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
     var submitForm = function submitForm() {
-      form.post("/posts/".concat(props.post.id));
+      form.put("/posts/".concat(props.post.id));
     };
     var __returned__ = {
       props: props,
