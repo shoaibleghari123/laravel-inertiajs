@@ -38,7 +38,7 @@
   });
 
   let submit = () => {
-      form.post(`/users/${props.user.id}`);
+      form.put(`/users/${props.user.id}`);
   }
 
 </script>

@@ -21,6 +21,7 @@ class PostController extends Controller
     {
         $user = auth()->user();
         $posts = Post::withCount('votes')->with('tags')
+            ->latest()
             ->paginate(5)
             ->through(function ($post) {
                 return [

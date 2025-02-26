@@ -16,7 +16,6 @@ class UserPolicy
 
     public function edit(User $user, User $model)
     {
-        return "edit post";
         return (bool) mt_rand(0, 1);
     }
 

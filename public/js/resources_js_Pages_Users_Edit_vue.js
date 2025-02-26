@@ -27,7 +27,7 @@ __webpack_require__.r(__webpack_exports__);
       email: props.user.email
     });
     var submit = function submit() {
-      form.post("/users/".concat(props.user.id));
+      form.put("/users/".concat(props.user.id));
     };
     var __returned__ = {
       props: props,

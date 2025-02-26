@@ -26,14 +26,9 @@ Route::middleware('auth')->group(function () {
         return inertia::render('Settings');
     });
 
-    Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/create', [UserController::class, 'create']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::get('users/{user}/edit', [UserController::class, 'edit']);
-    Route::post('users/{user}', [UserController::class, 'update']);
-    Route::get('/users/{user}/delete', [UserController::class, 'destroy']);
-
     Route::post('/posts/{postId}/votes',[VoteController::class, 'store']);
 
+    Route::get('/users/{user}/delete', [UserController::class, 'destroy']);
+    Route::resource('users', UserController::class);
     Route::resource('posts', PostController::class);
 });
