@@ -22,9 +22,8 @@
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <ul class="space-y-4">
 
-
             <li
-                v-for="post in posts"
+                v-for="post in posts.data"
                 :key="post.id"
                 class="bg-white p-4 rounded-lg shadow-sm flex justify-between items-start"
             >
@@ -54,16 +53,15 @@
                     </p>
                 </div>
 
-                <!-- Edit Button aligned to the right -->
                 <Link
-                    :href="`/posts/${post.id}/edit`"
+                    v-if="post.can.edit" :href="`/posts/1/edit`"
                     class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm ml-4"
                 >
                     Edit
                 </Link>
 
                 <Link
-                    :href="`/posts/${post.id}/delete`"
+                    v-if="post.can.delete" :href="`/posts/${post.id}/delete`"
                     class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 text-sm ml-4"
                 >
                     Delete
@@ -80,6 +78,7 @@
 
  defineProps({
     posts: Object,
+     can: Object
 });
 
 const formattedVotes = (votesCount) => {

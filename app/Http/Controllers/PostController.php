@@ -6,8 +6,11 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -16,7 +19,22 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::withCount('votes')->with('tags')->get();
+        $user = auth()->user();
+        $posts = Post::withCount('votes')->with('tags')
+            ->paginate(10)
+            ->through(function ($post) {
+                return [
+                    'id' => $post->id,
+                    'title' => $post->title,
+                    'body' => $post->body,
+                    'votes_count' => $post->votes_count,
+                    'tags' => $post->tags,
+                    'can' => [
+                        'edit' => Auth::user()->can('edit', $post),
+                        'delete' => Auth::user()->can('delete', $post),
+                    ]
+                ];
+            });
         return inertia::render('Posts/Index', ['posts' => $posts]);
     }
 
@@ -32,6 +50,7 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $validated['title'],
             'body' => $validated['body'],
+            'user_id' => auth()->id(),
         ]);
         collect($validated['tags'])->each(function ($tagData) use ($post) {
             $tag = Tag::firstOrCreate(['name' => $tagData['name']]);
@@ -47,6 +66,10 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, Post $post)
     {
+        if (!Gate::allows('update', $post)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validated();
         $post->update(['title' => $validated['title'], 'body' => $validated['body']]);
         $tagIds = collect($validated['tags'])->map(function ($tagData) {
@@ -62,6 +85,10 @@ class PostController extends Controller
 
     public function delete(Post $post)
     {
+        if (!Gate::allows('delete', $post)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         DB::beginTransaction();
         try {
             $tagIds = $post->tags()->pluck('tags.id');
