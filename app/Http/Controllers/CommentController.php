@@ -12,7 +12,7 @@ class CommentController extends Controller
     public function store(CommentRequest $request)
     {
         $post = Post::findOrFAIL($request->input('post_id'));
-        $post->comments()->create($request->validated());
+        $post->comments()->create($request->validated()+['user_id' => auth()->id()]);
         return redirect()->route('posts.index')->with('message', 'Comment added successfully.');
     }
 }

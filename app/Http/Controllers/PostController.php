@@ -20,7 +20,10 @@ class PostController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $posts = Post::withCount('votes')->with('tags')
+        $posts = Post::withCount('votes')
+            ->with('tags')
+            ->with('comments')
+            ->with('comments.user')
             ->latest()
             ->paginate(5)
             ->through(function ($post) {
@@ -30,12 +33,17 @@ class PostController extends Controller
                     'body' => $post->body,
                     'votes_count' => $post->votes_count,
                     'tags' => $post->tags,
+                    'comments' => $post->comments,
+                    'user' => $post->comments->map(function ($comment) {
+                        return $comment->user;
+                    }),
                     'can' => [
                         'edit' => Auth::user()->can('edit', $post),
                         'delete' => Auth::user()->can('delete', $post),
                     ]
                 ];
             });
+       // dd($posts);
         return inertia::render('Posts/Index', ['posts' => $posts]);
     }
 

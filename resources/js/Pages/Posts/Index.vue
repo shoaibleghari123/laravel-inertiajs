@@ -70,6 +70,21 @@
                     </div>
                 </div>
 
+                <!-- Comment Show -->
+                <div v-if="post.comments.length" class="mt-4 border-t pt-2">
+                    <h3 class="font-semibold text-lg mb-2">Comments</h3>
+                    <div
+                        v-for="comment in post.comments"
+                        :key="comment.id"
+                        class="p-3 bg-gray-100 rounded-lg mb-2"
+                    >
+                        <span class="font-bold text-gray-800">{{ comment.user.name }}</span>
+                        <p class="text-gray-700 mt-1">
+                            {{ comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment }}
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Comment Box -->
                 <div class="mt-2 flex">
                     <textarea
