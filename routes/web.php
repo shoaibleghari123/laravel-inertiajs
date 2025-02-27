@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('posts', PostController::class);
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/comment/user/{comment}', [CommentController::class, 'user'])->name('comment.user');
     Route::post('/like', [LikeController::class, 'like'])->name('likeable');
 
 });

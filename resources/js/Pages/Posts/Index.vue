@@ -86,7 +86,35 @@
                             >
                                 👍 Like
                             </button>
-                            <span class="text-gray-600 text-sm">{{ comment.likes_count ?? 0 }}</span>
+
+                            <span
+                                @click="showCommentUser(comment.id)"
+                                :class="{'cursor-pointer hover:underline': comment.likes_count > 0, 'cursor-default': comment.likes_count === 0}"
+                                class="text-gray-600 text-sm">
+                                {{ comment.likes_count ?? 0 }}
+                            </span>
+                            <!-- Add modal component -->
+                            <Modal
+                                :show="showLikesModal"
+                                @close="closeModal"
+                                title="Users who liked this comment"
+                            >
+
+                            <div v-if="loadingLikes" class="text-center py-4">
+                                Loading...
+                            </div>
+                            <div v-else-if="likeUsers.length === 0" class="text-center py-4">
+                                No likes yet
+                            </div>
+                            <ul v-else class="divide-y divide-gray-200">
+                                <li v-for="user in likeUsers" :key="user.id" class="py-3 flex">
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium text-gray-900">{{ user.name }}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            </Modal>
+
                         </div>
                     </div>
                 </div>
@@ -118,13 +146,19 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Pageination from "../../Shared/Pageination.vue";
 
+import Modal from '../../Components/Modal';
+import axios from 'axios';
+
 defineProps({
     posts: Object,
     can: Object
 });
 
 const comments = ref({});
-
+// Reactive state
+const showLikesModal = ref(false);
+const currentCommentId = ref(null);
+const likeUsers = ref([]);
 const deletePost = (id) => {
     if (confirm("Are you sure you want to delete this post?")) {
         useForm().delete(`/posts/${id}`);
@@ -161,7 +195,6 @@ const likeComment = (commentId) => {
 
     form.post('like', {
         onSuccess: () => {
-         //   Toastr.success('This is a success message!');
             console.log('successfully added');
         },
         onError: (errors) => {
@@ -170,7 +203,21 @@ const likeComment = (commentId) => {
     })
 }
 
-const commentCount = (count) => {
-    return count;
+const showCommentUser = (commentId) => {
+    currentCommentId.value = commentId;
+
+    axios.get(`/comment/user/${commentId}`)
+        .then(response => {
+            console.log(response.data);
+            likeUsers.value = response.data;
+            showLikesModal.value = true;
+        })
+        .catch(error => {
+            console.error('Error fetching likes:', error);
+        });
 }
+
+const closeModal = () => {
+    showLikesModal.value = false;
+};
 </script>

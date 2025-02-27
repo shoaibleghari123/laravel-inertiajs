@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class CommentController extends Controller
 {
@@ -15,5 +16,11 @@ class CommentController extends Controller
         $post = Post::findOrFAIL($request->input('post_id'));
         $post->comments()->create($request->validated()+['user_id' => auth()->id()]);
         return Redirect::route('posts.index')->with('message', 'Comment added successfully')->with('type', 'success');
+    }
+
+    public function user(Request $request, Comment $comment)
+    {
+        $users = $comment->likes()->with('user:id,name')->get()->pluck('user');
+        return response()->json($users);
     }
 }
