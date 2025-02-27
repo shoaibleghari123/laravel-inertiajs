@@ -1,9 +1,9 @@
 <template>
     <div v-if="show" class="fixed inset-0 overflow-y-auto z-50">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <!-- Background overlay -->
+            <!-- Background overlay with transparency -->
             <div class="fixed inset-0" @click="close">
-                <div class="absolute inset-0 bg-gray-500 opacity-75 transition-opacity"></div>
+<!--                <div class="absolute inset-0 bg-gray-500 opacity-30 transition-opacity"></div>-->
             </div>
 
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
@@ -18,7 +18,7 @@
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                             <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
-                                User List
+                                {{ title }}
                             </h3>
                             <div class="mt-2">
                                 <slot></slot>
@@ -39,22 +39,24 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    props: {
-        show: {
-            type: Boolean,
-            default: false
-        },
-        title: {
-            type: String,
-            default: 'Modal'
-        }
-    },
-    methods: {
-        close() {
-            this.$emit('close');
-        }
-    }
-}
+
+<script setup>
+ defineProps({
+     show: {
+         type: Boolean,
+         default: false
+     },
+     title: {
+         type: String,
+         default: 'Modal'
+     },
+ });
+ const emit = defineEmits(['closeModal']);
+ const close = () => {
+     emit('closeModal');
+ }
 </script>
+
+
+
+

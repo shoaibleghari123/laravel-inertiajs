@@ -18,7 +18,7 @@ class CommentController extends Controller
         return Redirect::route('posts.index')->with('message', 'Comment added successfully')->with('type', 'success');
     }
 
-    public function user(Request $request, Comment $comment)
+    public function commentsLike(Comment $comment)
     {
         $users = $comment->likes()->with('user:id,name')->get()->pluck('user');
         return response()->json($users);

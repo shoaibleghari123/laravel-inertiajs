@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -33,6 +34,6 @@ class LikeController extends Controller
             'likeable_id' => $request->likeable_id,
             'likeable_type' => $likeableType
         ]);
-        return Redirect::route('posts.index')->with('message', 'liked saved')->with('type', 'info');
+        return Redirect::route('posts.index')->with('message', 'liked recorded')->with('type', 'info');
     }
 }

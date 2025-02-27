@@ -96,8 +96,8 @@
                             <!-- Add modal component -->
                             <Modal
                                 :show="showLikesModal"
-                                @close="closeModal"
-                                title="Users who liked this comment"
+                                @closeModal="closeModal"
+                                title="Users Name"
                             >
 
                             <div v-if="loadingLikes" class="text-center py-4">
@@ -155,7 +155,6 @@ defineProps({
 });
 
 const comments = ref({});
-// Reactive state
 const showLikesModal = ref(false);
 const currentCommentId = ref(null);
 const likeUsers = ref([]);
@@ -206,9 +205,8 @@ const likeComment = (commentId) => {
 const showCommentUser = (commentId) => {
     currentCommentId.value = commentId;
 
-    axios.get(`/comment/user/${commentId}`)
+    axios.get(`/comments/${commentId}/likes`)
         .then(response => {
-            console.log(response.data);
             likeUsers.value = response.data;
             showLikesModal.value = true;
         })

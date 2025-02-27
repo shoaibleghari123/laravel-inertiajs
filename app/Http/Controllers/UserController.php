@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -12,33 +13,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::query()
-        ->when(request()->input('search'), function ($query, $search) {
-            $query->where('name', 'LIKE', "%{$search}%");
-        })->latest()
-        ->paginate(10)
-        ->withQueryString()
-        ->through(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'can' => [
-                    'edit' => Auth::user()->can('edit', $user),
-                    'delete' => Auth::user()->can('delete', $user),
-                ],
-            ];
-        });
-        $filters = request()->only(['search']);
-        $can = [
-            'createUser' => Auth::user()->can('create', User::class),
-        ];
-
-        return inertia::render('Users/index', [
-            'users' => $users,
-            'filters' => $filters,
-            'can' => $can,
-        ]);
+      $data = (new UserService())->index();
+      return inertia::render('Users/index', $data);
     }
 
     public function create()
@@ -55,9 +31,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return inertia::render('Users/Edit', [
-            'user' => $user,
-        ]);
+        return inertia::render('Users/Edit', ['user' => $user,]);
     }
 
     public function update(UpdateUserRequest $request, User $user)

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use App\Services\PostService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,39 +18,15 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
+    private $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
     public function index()
     {
-        $user = auth()->user();
-        $posts = Post::query()
-            ->withCount('votes')
-            ->withCount('comments')
-            ->with('tags')
-           // ->with('comments')
-            ->with('comments.user')
-            ->with(['comments' => function ($query) {
-                $query->withCount('likes');
-            }])
-            ->latest()
-            ->paginate(5)
-            ->through(function ($post) {
-                return [
-                    'id' => $post->id,
-                    'title' => $post->title,
-                    'body' => $post->body,
-                    'votes_count' => $post->votes_count,
-                    'comments_count' => $post->comments_count,
-                    'tags' => $post->tags,
-                    'comments' => $post->comments,
-                    'user' => $post->comments->map(function ($comment) {
-                        return $comment->user;
-                    }),
-                    'can' => [
-                        'edit' => Auth::user()->can('edit', $post),
-                        'delete' => Auth::user()->can('delete', $post),
-                    ]
-                ];
-            });
-     //   dd($posts);
+        $posts = $this->postService->index();
         return inertia::render('Posts/Index', ['posts' => $posts]);
     }
 
@@ -61,15 +38,8 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         $validated = $request->validated();
-
-        $post = Post::create([
-            'title' => $validated['title'],
-            'body' => $validated['body'],
-            'user_id' => auth()->id(),
-        ]);
-        collect($validated['tags'])->each(function ($tagData) use ($post) {
-            $tag = Tag::firstOrCreate(['name' => $tagData['name']]);
-            $post->tags()->attach($tag->id);
+        DB::transaction(function () use($validated){
+            $this->postService->store($validated);
         });
         return Redirect::route('posts.index')->with('message', 'Post created successfully')->with('type', 'success');
     }
@@ -86,15 +56,9 @@ class PostController extends Controller
         }
 
         $validated = $request->validated();
-        $post->update(['title' => $validated['title'], 'body' => $validated['body']]);
-        $tagIds = collect($validated['tags'])->map(function ($tagData) {
-            return Tag::updateOrCreate(
-                ['id' => $tagData['id'] ?? null],
-                ['name' => $tagData['name']]
-            )->id;
-        })->toArray();
-
-        $post->tags()->sync($tagIds);
+        DB::transaction(function () use($validated, $post) {
+            $this->postService->update($validated, $post);
+        });
         return Redirect::route('posts.index')->with('message', 'Post updated successfully')->with('type', 'success');
     }
 
@@ -104,33 +68,15 @@ class PostController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        DB::beginTransaction();
-        try {
-            $tagIds = $post->tags()->pluck('tags.id');
-
-            $post->tags()->detach();
-            $post->delete();
-            Tag::whereIn('id', $tagIds)->doesntHave('posts')->delete();
-
-            DB::commit();
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            DB::rollBack();
-            return redirect()->back()->with('message', 'Failed to save');
-        }
+        DB::transaction(function () use ($post) {
+            $this->postService->delete($post);
+        });
         return Redirect::route('posts.index')->with('message', 'Post and tags deleted successfully.')->with('type', 'success');
     }
 
     public function show(Post $post)
     {
-        $post = Post::query()
-            ->withCount('votes as total_votes')
-            ->withCount(['votes as up_votes_count' => function ($query) {
-                $query->where('vote', 'up');
-            }])->withCount(['votes as down_votes_count' => function ($query) {
-                $query->where('vote', 'down');
-            }])->where('id', $post->id)->first();
-
+        $this->postService->show($post);
         return inertia::render('Posts/Show', ['post' => $post]);
     }
 }
