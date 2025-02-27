@@ -49,7 +49,9 @@
                         <p class="text-sm text-gray-500">
                             {{ formattedVotes(post.votes_count) }}
                         </p>
+
                     </div>
+
 
                     <div class="flex">
                         <Link
@@ -72,18 +74,32 @@
 
                 <!-- Comment Show -->
                 <div v-if="post.comments.length" class="mt-4 border-t pt-2">
-                    <h3 class="font-semibold text-lg mb-2">Comments</h3>
+                    <h3 class="font-semibold text-lg mb-2">Comments <span class="text-red-600 text-sm">({{ post.comments_count ?? 0 }})</span></h3>
                     <div
                         v-for="comment in post.comments"
                         :key="comment.id"
-                        class="p-3 bg-gray-100 rounded-lg mb-2"
+                        class="p-3 bg-gray-100 rounded-lg mb-2 flex justify-between items-center"
                     >
-                        <span class="font-bold text-gray-800">{{ comment.user.name }}</span>
-                        <p class="text-gray-700 mt-1">
-                            {{ comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment }}
-                        </p>
+                        <div>
+                            <span class="font-bold text-gray-800">{{ comment.user.name }}</span>
+                            <p class="text-gray-700 mt-1">
+                                {{ comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment }}
+                            </p>
+                        </div>
+
+                        <!-- Like Button -->
+                        <div class="flex items-center space-x-2">
+                            <button
+                                @click="likeComment(comment.id)"
+                                class="text-blue-500 hover:text-blue-700 text-sm"
+                            >
+                                👍 Like
+                            </button>
+                            <span class="text-gray-600 text-sm">{{ comment.likes_count ?? 0 }}</span>
+                        </div>
                     </div>
                 </div>
+
 
                 <!-- Comment Box -->
                 <div class="mt-2 flex">
@@ -145,5 +161,24 @@ const submitComment = (postId) => {
         }
     });
 };
+
+const likeComment = (commentId) => {
+    const form = useForm({
+        likeable_id: commentId,
+        likeable_type: 'comment',
+    });
+
+    form.post('like', {
+        onSuccess: () => {
+            console.log('successfully added');
+        },
+        onError: (errors) => {
+            console.log('like error:', errors);
+        }
+    })
+}
+
+const commentCount = (count) => {
+    return count;
+}
 </script>
-Walker

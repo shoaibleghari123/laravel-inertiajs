@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 
 
 Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -33,5 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('posts', PostController::class);
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/like', [LikeController::class, 'like'])->name('likeable');
 
 });

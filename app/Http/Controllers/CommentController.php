@@ -15,4 +15,9 @@ class CommentController extends Controller
         $post->comments()->create($request->validated()+['user_id' => auth()->id()]);
         return redirect()->route('posts.index')->with('message', 'Comment added successfully.');
     }
+
+    public function like(Request $request)
+    {
+        dd($request->all());
+    }
 }
