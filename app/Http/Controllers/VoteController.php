@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class VoteController extends Controller
 {
@@ -16,7 +17,6 @@ class VoteController extends Controller
             ['post_id' => $postId],
             ['vote' => $request->vote]
         );
-
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Your vote has been recorded')->with('type', 'success');
     }
 }

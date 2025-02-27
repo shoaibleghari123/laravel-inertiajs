@@ -6,6 +6,7 @@ use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CommentController extends Controller
 {
@@ -13,11 +14,6 @@ class CommentController extends Controller
     {
         $post = Post::findOrFAIL($request->input('post_id'));
         $post->comments()->create($request->validated()+['user_id' => auth()->id()]);
-        return redirect()->route('posts.index')->with('message', 'Comment added successfully.');
-    }
-
-    public function like(Request $request)
-    {
-        dd($request->all());
+        return Redirect::route('posts.index')->with('message', 'Comment added successfully')->with('type', 'success');
     }
 }

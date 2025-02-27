@@ -24,10 +24,10 @@ class PostController extends Controller
             ->withCount('votes')
             ->withCount('comments')
             ->with('tags')
-            ->with('comments')
+           // ->with('comments')
             ->with('comments.user')
             ->with(['comments' => function ($query) {
-                $query->withCount('likes'); // Count likes for each comment
+                $query->withCount('likes');
             }])
             ->latest()
             ->paginate(5)
@@ -71,7 +71,7 @@ class PostController extends Controller
             $tag = Tag::firstOrCreate(['name' => $tagData['name']]);
             $post->tags()->attach($tag->id);
         });
-        return Redirect::route('posts.index')->with('message', 'Post created.');
+        return Redirect::route('posts.index')->with('message', 'Post created successfully')->with('type', 'success');
     }
 
     public function edit(Post $post)
@@ -95,7 +95,7 @@ class PostController extends Controller
         })->toArray();
 
         $post->tags()->sync($tagIds);
-        return redirect()->route('posts.index')->with('message', 'Post updated successfully.');
+        return Redirect::route('posts.index')->with('message', 'Post updated successfully')->with('type', 'success');
     }
 
     public function destroy(Post $post)
@@ -118,7 +118,7 @@ class PostController extends Controller
             DB::rollBack();
             return redirect()->back()->with('message', 'Failed to save');
         }
-        return redirect()->route('posts.index')->with('message', 'Post and tags deleted successfully.');
+        return Redirect::route('posts.index')->with('message', 'Post and tags deleted successfully.')->with('type', 'success');
     }
 
     public function show(Post $post)

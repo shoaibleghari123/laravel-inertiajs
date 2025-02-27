@@ -1,15 +1,6 @@
 <template>
     <Head title="Post" />
 
-    <!-- Flash message -->
-    <div
-        v-if="$page.props.flash.message"
-        class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
-        role="alert"
-    >
-        {{ $page.props.flash.message }}
-    </div>
-
     <div class="flex justify-between mb-6">
         <div class="flex item-center">
             <h1 class="text-3xl">Post</h1>
@@ -170,6 +161,7 @@ const likeComment = (commentId) => {
 
     form.post('like', {
         onSuccess: () => {
+         //   Toastr.success('This is a success message!');
             console.log('successfully added');
         },
         onError: (errors) => {

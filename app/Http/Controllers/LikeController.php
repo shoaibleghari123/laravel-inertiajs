@@ -21,11 +21,11 @@ class LikeController extends Controller
         $existingLike = Like::where([
             'user_id' => auth()->id(),
             'likeable_id' => $request->likeable_id,
-            'likeable_type' => $request->likeable_type
+            'likeable_type' => $likeableType
         ])->first();
 
         if ($existingLike) {
-            return Redirect::route('posts.index')->with('message', 'Already liked');
+            return Redirect::route('posts.index')->with('message', 'Already liked')->with('type', 'info');
         }
 
         $response = Like::create([
@@ -33,7 +33,6 @@ class LikeController extends Controller
             'likeable_id' => $request->likeable_id,
             'likeable_type' => $likeableType
         ]);
-        return Redirect::route('posts.index')->with('message', 'liked saved');
+        return Redirect::route('posts.index')->with('message', 'liked saved')->with('type', 'info');
     }
-
 }

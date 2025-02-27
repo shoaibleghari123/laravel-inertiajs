@@ -2,6 +2,7 @@ import {createApp, h} from 'vue'
 import {createInertiaApp, Link, Head} from '@inertiajs/inertia-vue3'
 import {InertiaProgress} from '@inertiajs/progress';
 import Layout from "./Shared/Layout.vue";
+import 'toastr/build/toastr.min.css';
 
 createInertiaApp({
     resolve: async name => {
@@ -25,9 +26,27 @@ createInertiaApp({
 
 });
 
-
-
 InertiaProgress.init({
     showSpinner: true
 });
+
+export default {
+    props: {
+        flashMessages: Object
+    },
+    watch: {
+        flash: {
+            handler(flash) {
+                if (flash.message) {
+                    if (flash.type === 'success') {
+                        Toastr.success(flash.message);
+                    } else if (flash.type === 'error') {
+                        Toastr.error(flash.message);
+                    }
+                }
+            },
+            immediate: true
+        }
+    }
+}
 

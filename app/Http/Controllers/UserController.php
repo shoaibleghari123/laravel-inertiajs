@@ -50,7 +50,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         User::create($request->validated());
-        return redirect('/users');
+        return redirect('/users')->with('message', 'User created successfully')->with('type', 'success');
     }
 
     public function edit(User $user)
@@ -63,13 +63,13 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->validated());
-        return redirect('/users');
+        return redirect('/users')->with('message', 'User updated successfully')->with('type', 'success');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect('/users');
+        return redirect('/users')->with('message', 'User deleted successfully')->with('type', 'success');
     }
 
 }

@@ -26,10 +26,37 @@
 
 <script>
 import Nav from "./Nav.vue";
-
+import Toastr from "../Plugins/Toastr";
 export default {
-  components: {Nav}
+  components: {Nav},
+    props: {flash: Object},
+    watch: {
+        flash: {
+            handler(flash) {
+                if (flash && flash.message) {
+                    if (flash.type === 'success') {
+                        Toastr.success(flash.message);
+                    } else if (flash.type === 'error') {
+                        Toastr.error(flash.message);
+                    } else if (flash.type === 'info') {
+                        Toastr.info(flash.message);
+                    } else if (flash.type === 'warning') {
+                        Toastr.warning(flash.message);
+                    }
+                }
+            },
+            immediate: true
+        }
+    }
 }
+
+
+// export default {
+//     props: {
+//         flashMessages: Object
+//     },
+//
+// }
 </script>
 
 <style>
